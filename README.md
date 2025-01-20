@@ -149,9 +149,13 @@ If you have any questions or need help, please open an issue in the GitHub repos
 <div>
   <sub>
 ### 📞 Contact
+
 Paro - [@Pamenarti](https://twitter.com/pamenarti)
+
 Email - [pamenarti@gmail.com](pamenarti@gmail.com)
+
 Project Link: [https://github.com/Pamenarti/Directorybrowser](https://github.com/Pamenarti/Directorybrowser)
+
   </sub>  
 </div> 
 
