@@ -1,7 +1,7 @@
 # Web Directory Scanner
 
 <div align="center">
-  <img src="build/icon.png" alt="Web Directory Scanner Logo" width="200"/>
+  <img src="build/icon.png" alt="Web Directory Scanner Logo" width="100"/>
   <br/>
   <p>
     <strong>A powerful tool for scanning and discovering working web directories</strong>
