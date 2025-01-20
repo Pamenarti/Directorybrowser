@@ -5,7 +5,7 @@
   "description": "A tool for scanning and finding working web directories",
   "author": {
     "name": "Web Directory Scanner Team",
-    "email": "contact@webdirectoryscanner.com"
+    "email": "pamenarti@gmail.com"
   },
   "main": "electron/main.js",
   "scripts": {

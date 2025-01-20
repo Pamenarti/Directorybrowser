@@ -1,7 +1,12 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 // Güvenli bir şekilde ana süreç ile iletişim kurmak için API
-contextBridge.exposeInMainWorld('electronAPI', {
+contextBridge.exposeInMainWorld('electron', {
+  // Pencere kontrolleri
+  minimize: () => ipcRenderer.send('minimize-window'),
+  maximize: () => ipcRenderer.send('maximize-window'),
+  close: () => ipcRenderer.send('close-window'),
+
   // HTTP istekleri için
   request: async (url, options) => {
     try {
@@ -26,4 +31,4 @@ contextBridge.exposeInMainWorld('electronAPI', {
       version: process.version
     };
   }
-}); 
+});

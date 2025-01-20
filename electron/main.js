@@ -1,4 +1,4 @@
-const { app, BrowserWindow, session } = require('electron');
+const { app, BrowserWindow, session, ipcMain } = require('electron');
 const path = require('path');
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -14,6 +14,8 @@ const createWindow = () => {
     maxWidth: 1200,
     maxHeight: 800,
     resizable: false,
+    frame: false,
+    icon: path.join(__dirname, '../build/icon.ico'),
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -21,6 +23,20 @@ const createWindow = () => {
       webSecurity: true,
       allowRunningInsecureContent: false,
       preload: path.join(__dirname, 'preload.js')
+    }
+  });
+
+  // Disable DevTools in production
+  if (process.env.NODE_ENV === 'production') {
+    mainWindow.webContents.on('devtools-opened', () => {
+      mainWindow.webContents.closeDevTools();
+    });
+  }
+
+  // Disable keyboard shortcut for DevTools (Ctrl+Shift+I / Cmd+Option+I)
+  mainWindow.webContents.on('before-input-event', (event, input) => {
+    if ((input.control || input.meta) && input.shift && input.key.toLowerCase() === 'i') {
+      event.preventDefault();
     }
   });
 
@@ -48,22 +64,8 @@ const createWindow = () => {
     });
   });
 
-  // Geliştirme modunda localhost'u yükle
-  if (isDev) {
-    console.log('Development mode - loading from localhost:5174');
-    mainWindow.loadURL('http://localhost:5174').catch(err => {
-      console.error('Failed to load URL:', err);
-      // Yükleme başarısız olursa 3 saniye sonra tekrar dene
-      setTimeout(() => {
-        console.log('Retrying to load...');
-        mainWindow.loadURL('http://localhost:5174');
-      }, 3000);
-    });
-    mainWindow.webContents.openDevTools();
-  } else {
-    console.log('Production mode - loading from dist/index.html');
-    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
-  }
+  // Load the app
+  mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
 
   // Pencere kapatıldığında
   mainWindow.on('closed', () => {
@@ -87,6 +89,23 @@ const createWindow = () => {
     }
   });
 };
+
+// Pencere kontrolleri için IPC olayları
+ipcMain.on('minimize-window', () => {
+  mainWindow?.minimize();
+});
+
+ipcMain.on('maximize-window', () => {
+  if (mainWindow?.isMaximized()) {
+    mainWindow?.unmaximize();
+  } else {
+    mainWindow?.maximize();
+  }
+});
+
+ipcMain.on('close-window', () => {
+  mainWindow?.close();
+});
 
 // Uygulama hazır olduğunda
 app.whenReady().then(() => {

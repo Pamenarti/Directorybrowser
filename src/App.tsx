@@ -1,8 +1,42 @@
 import './index.css';
 
-import { ChartBarIcon, CheckCircleIcon, ExclamationCircleIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
+import { ChartBarIcon, CheckCircleIcon, ExclamationCircleIcon, GlobeAltIcon, MinusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, memo, useCallback, useState } from 'react';
+
+// Titlebar Component
+const Titlebar = () => {
+  const handleClose = () => {
+    window.close();
+  };
+
+  const handleMinimize = () => {
+    (window as any).electron?.minimize();
+  };
+
+  return (
+    <div className="bg-dark-900 h-8 flex items-center justify-between px-4 select-none drag">
+      <div className="flex items-center">
+        <GlobeAltIcon className="h-4 w-4 text-primary-500 mr-2" />
+        <span className="text-sm text-dark-300">Web Directory Scanner</span>
+      </div>
+      <div className="flex items-center space-x-2 no-drag">
+        <button
+          onClick={handleMinimize}
+          className="p-1 hover:bg-dark-700 rounded-sm group"
+        >
+          <MinusIcon className="h-4 w-4 text-dark-400 group-hover:text-white" />
+        </button>
+        <button
+          onClick={handleClose}
+          className="p-1 hover:bg-red-600 rounded-sm group"
+        >
+          <XMarkIcon className="h-4 w-4 text-dark-400 group-hover:text-white" />
+        </button>
+      </div>
+    </div>
+  );
+};
 
 // Statistics Card Component
 const StatCard = memo(({ title, value, icon: Icon, color }: { title: string; value: string | number; icon: any; color: string }) => (
@@ -226,99 +260,102 @@ function App() {
   }, [domain, checkUrl]);
 
   return (
-    <div className="min-h-screen bg-dark-900">
-      <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <GlobeAltIcon className="mx-auto h-12 w-12 text-primary-500" />
-          <h1 className="mt-2 text-3xl font-bold tracking-tight text-white">
-            Web Directory Scanner
-          </h1>
-          <p className="mt-2 text-dark-300">
-            Enter a domain name to find working web directories
-          </p>
-        </div>
+    <div className="min-h-screen bg-dark-900 flex flex-col">
+      <Titlebar />
+      <div className="flex-1 overflow-auto">
+        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <GlobeAltIcon className="mx-auto h-12 w-12 text-primary-500" />
+            <h1 className="mt-2 text-3xl font-bold tracking-tight text-white">
+              Web Directory Scanner
+            </h1>
+            <p className="mt-2 text-dark-300">
+              Enter a domain name to find working web directories
+            </p>
+          </div>
 
-        {/* Statistics Cards */}
-        {(totalUrls > 0 || workingUrls.length > 0) && (
-          <div className="mt-8 p-6 bg-dark-800 rounded-lg shadow-lg border border-dark-700">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
-              <ChartBarIcon className="h-5 w-5 mr-2 text-primary-500" />
-              Scan Statistics
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <StatCard
-                title="Scanned Website"
-                value={domain}
-                icon={GlobeAltIcon}
-                color="bg-blue-600"
-              />
-              <StatCard
-                title="Total URLs"
-                value={totalUrls}
-                icon={ChartBarIcon}
-                color="bg-purple-600"
-              />
-              <StatCard
-                title="Working URLs"
-                value={workingUrls.length}
-                icon={CheckCircleIcon}
-                color="bg-green-600"
-              />
-              <StatCard
-                title="Not Working"
-                value={totalUrls - workingUrls.length}
-                icon={ExclamationCircleIcon}
-                color="bg-red-600"
-              />
+          {/* Statistics Cards */}
+          {(totalUrls > 0 || workingUrls.length > 0) && (
+            <div className="mt-8 p-6 bg-dark-800 rounded-lg shadow-lg border border-dark-700">
+              <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
+                <ChartBarIcon className="h-5 w-5 mr-2 text-primary-500" />
+                Scan Statistics
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <StatCard
+                  title="Scanned Website"
+                  value={domain}
+                  icon={GlobeAltIcon}
+                  color="bg-blue-600"
+                />
+                <StatCard
+                  title="Total URLs"
+                  value={totalUrls}
+                  icon={ChartBarIcon}
+                  color="bg-purple-600"
+                />
+                <StatCard
+                  title="Working URLs"
+                  value={workingUrls.length}
+                  icon={CheckCircleIcon}
+                  color="bg-green-600"
+                />
+                <StatCard
+                  title="Not Working"
+                  value={totalUrls - workingUrls.length}
+                  icon={ExclamationCircleIcon}
+                  color="bg-red-600"
+                />
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        <div className="mt-8">
-          <div className="flex gap-2 max-w-xl mx-auto">
-            <input
-              type="text"
-              placeholder="e.g. example.com"
-              value={domain}
-              onChange={(e) => setDomain(e.target.value)}
-              className="flex-1 px-3 py-1.5 bg-dark-800 border border-dark-700 rounded-md text-sm text-white placeholder-dark-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            />
-            <button
-              onClick={handleSearch}
-              disabled={loading}
-              className="px-4 py-1.5 bg-primary-600 text-white text-sm rounded-md font-medium hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-900 disabled:bg-primary-800 disabled:cursor-not-allowed transition-colors"
-            >
-              {loading ? 'Scanning...' : 'Scan'}
-            </button>
-          </div>
+          <div className="mt-8">
+            <div className="flex gap-2 max-w-xl mx-auto">
+              <input
+                type="text"
+                placeholder="e.g. example.com"
+                value={domain}
+                onChange={(e) => setDomain(e.target.value)}
+                className="flex-1 px-3 py-1.5 bg-dark-800 border border-dark-700 rounded-md text-sm text-white placeholder-dark-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+              <button
+                onClick={handleSearch}
+                disabled={loading}
+                className="px-4 py-1.5 bg-primary-600 text-white text-sm rounded-md font-medium hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-dark-900 disabled:bg-primary-800 disabled:cursor-not-allowed transition-colors"
+              >
+                {loading ? 'Scanning...' : 'Scan'}
+              </button>
+            </div>
 
-          {error && (
-            <div className="mt-4 rounded-md bg-red-900/50 border border-red-700 p-4">
-              <div className="flex">
-                <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-                <div className="ml-3">
-                  <p className="text-sm text-red-400">{error}</p>
+            {error && (
+              <div className="mt-4 rounded-md bg-red-900/50 border border-red-700 p-4">
+                <div className="flex">
+                  <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
+                  <div className="ml-3">
+                    <p className="text-sm text-red-400">{error}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {loading && (
-            <div className="mt-8 text-center">
-              <div className="inline-flex items-center px-4 py-2 font-semibold leading-6 text-primary-400">
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Scanning directories...
+            {loading && (
+              <div className="mt-8 text-center">
+                <div className="inline-flex items-center px-4 py-2 font-semibold leading-6 text-primary-400">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Scanning directories...
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <UrlList
-            urls={workingUrls}
-            onUrlClick={(url) => setSelectedUrl(url)}
-          />
+            <UrlList
+              urls={workingUrls}
+              onUrlClick={(url) => setSelectedUrl(url)}
+            />
+          </div>
         </div>
       </div>
 
