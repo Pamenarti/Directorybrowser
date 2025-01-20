@@ -30,20 +30,27 @@
       "target": [
         {
           "target": "nsis",
-          "arch": [
-            "x64"
-          ]
+          "arch": ["x64"]
         }
       ],
-      "requestedExecutionLevel": "asInvoker"
+      "icon": "build/icon.ico"
     },
     "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
+      "oneClick": true,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": false,
+      "deleteAppDataOnUninstall": true,
+      "artifactName": "${productName}-Setup-${version}.exe",
+      "shortcutName": "${productName}",
+      "uninstallDisplayName": "${productName}",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Web Directory Scanner"
-    }
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico"
+    },
+    "asar": true,
+    "compression": "maximum"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",

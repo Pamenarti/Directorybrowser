@@ -45,7 +45,7 @@
 ## Installation
 
 ### Windows 11 Installation
-1. Download the latest installer from the [releases page](https://github.com/yourusername/web-directory-scanner/releases)
+1. Download the latest installer from the [releases page](https://github.com/Pamenarti/Directorybrowser/releases/tag/v1.0.0)
 2. Run the installer
 3. Choose your installation directory
 4. Launch the application from desktop shortcut or start menu
@@ -53,10 +53,10 @@
 ### Building from Source
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/web-directory-scanner.git
+git clone https://github.com/Pamenarti/Directorybrowser
 
 # Navigate to project directory
-cd web-directory-scanner
+cd Directorybrowser
 
 # Install dependencies
 npm install
@@ -146,14 +146,16 @@ If you have any questions or need help, please open an issue in the GitHub repos
 
 ---
 
+<div>
+  <sub>
+### 📞 Contact
+Paro - [@Pamenarti](https://twitter.com/pamenarti)
+Email - [pamenarti@gmail.com](pamenarti@gmail.com)
+Project Link: [https://github.com/Pamenarti/Directorybrowser](https://github.com/Pamenarti/Directorybrowser)
+  </sub>  
+</div> 
+
+
 <div align="center">
   <sub>Built with ❤️ by Web Directory Scanner Team</sub>
 </div> 
-
-### 📞 Contact
-
-Paro - [@Pamenarti](https://twitter.com/pamenarti)
-
-Email - [pamenarti@gmail.com](pamenarti@gmail.com)
-
-Project Link: [https://github.com/Pamenarti/Directorybrowser](https://github.com/Pamenarti/Directorybrowser)
